@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E83F4172080B20B00AEA4ED /* Pods_VisibilityiOS.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5DFE16A67C00127F12AE49D3 /* Pods_VisibilityiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0ECD851A2080314C00A1E2E4 /* VisibilityiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0ECD85232080331C00A1E2E4 /* VisibilitySocketLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */; };
@@ -23,7 +22,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0E83F4172080B20B00AEA4ED /* Pods_VisibilityiOS.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
