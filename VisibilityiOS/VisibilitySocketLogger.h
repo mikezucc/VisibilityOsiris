@@ -15,7 +15,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SCKLogMessage.h"
+#import <VisibilityiOS/SCKLogMessage.h>
 
 typedef enum : NSUInteger {
     UnconfiguredAPIKey,
