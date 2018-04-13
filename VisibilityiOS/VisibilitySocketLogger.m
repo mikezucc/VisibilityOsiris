@@ -13,7 +13,7 @@
      \__\/         \__\/         \__\/                       \__\/         \__\/
  */
 
-#import "VisibilitySocketLogger.h"
+#import <VisibilityiOS/VisibilitySocketLogger.h>
 
 #import <Foundation/Foundation.h>
 
@@ -44,10 +44,10 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
 - (void)configureWithAPIKey:(NSString *)apiKey {
     if (apiKey == nil) { return; }
     NSString *existingAPIKey = [self getAPIKey];
-    if (existingAPIKey && ![existingAPIKey isEqualToString:apiKey]) {
+    if (![existingAPIKey isEqualToString:apiKey] || self.manager == nil || self.manager.status == SocketIOStatusDisconnected) {
         [[self sckDefaults] setObject:apiKey forKey:kUserDefaultsAPIKey];
         NSString *endpoint = [self userDefinedEndpoint];
-        if (endpoint && endpoint.length) {
+        if (endpoint != nil && endpoint.length > 0) {
             [self initiateSocket:[self endpoint:endpoint]];
         }
     }
@@ -57,9 +57,12 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
 - (void)configureWithEndpoint:(NSString *)endpoint {
     if (endpoint == nil) { return; }
     NSString *existingEndpoint = [self userDefinedEndpoint];
-    if (existingEndpoint && ![existingEndpoint isEqualToString:endpoint]) {
+    if (![existingEndpoint isEqualToString:endpoint] || self.manager == nil || self.manager.status == SocketIOStatusDisconnected) {
         [[self sckDefaults] setObject:endpoint forKey:kUserdefaultsEndpoint];
-        [self initiateSocket:[self endpoint:endpoint]];
+        NSString *api_key = [self getAPIKey];
+        if (api_key != nil && api_key.length > 0) {
+            [self initiateSocket:[self endpoint:endpoint]];
+        }
     }
 }
 
@@ -73,14 +76,36 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
 }
 
 - (NSURL * _Nonnull)endpoint:(NSString * _Nullable)path {
-    NSURLComponents *components = [[NSURLComponents alloc] initWithString:[self userDefinedEndpoint]];
-    if (path) { components.path = path; }
+    NSURL *baseEndpoint = [NSURL URLWithString:path];
+    if (baseEndpoint == nil) { return nil; }
+    NSURLComponents *components = [[NSURLComponents alloc] initWithURL:baseEndpoint
+                                               resolvingAgainstBaseURL:NO];
     return [components URL];
+}
+
+- (NSDictionary *)clientIdentityInfo {
+    NSString *device_identifier = [self device_identifier];
+    NSString *app_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    return @{
+             @"api_key": [self getAPIKey],
+             @"team_identifier":[self getAPIKey],
+             @"device_identifier":device_identifier,
+             @"human_name":[[UIDevice currentDevice] model],
+             @"reported_type":[[UIDevice currentDevice] model],
+             @"username":@"jeremy100",
+             @"app_version":app_version,
+             @"os_version":[[UIDevice currentDevice] systemVersion],
+             @"sdk_version":SDK_VERSION
+             };
+}
+
+- (NSString *)device_identifier {
+    return [[self sckDefaults] stringForKey:kUserDefaultsSCKIdentifier] ?: [self resetDeviceIdentifier];
 }
 
 // I know this is redundant, but you'll thank me when you start trying to make tectonic
 // shifts to the way this thing behaves a year from now
-- (NSURL * _Nullable)localServerEndpoint { return [self endpoint:nil]; }
+- (NSURL * _Nullable)localServerEndpoint { return [self endpoint:[self userDefinedEndpoint]]; }
 
 // LOGGER
 + (SCKLogger *)shared {
@@ -102,28 +127,14 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
                                                      config:@{@"log": @YES, @"compress": @YES}];
     SocketIOClient* socket = self.manager.defaultSocket;
     
-    NSString *app_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    
-    NSString *device_identifier = [[self sckDefaults] stringForKey:kUserDefaultsSCKIdentifier] ?: [self resetDeviceIdentifier];
-    
     [socket on:@"ack" callback:^(NSArray* data, SocketAckEmitter* ack) {
-        NSDictionary *registrationParams = @{
-                                             @"api_key":[self getAPIKey],
-                                             @"team_identifier":[self getAPIKey],
-                                             @"device_identifier":device_identifier,
-                                             @"human_name":[[UIDevice currentDevice] model],
-                                             @"reported_type":[[UIDevice currentDevice] model],
-                                             @"username":@"jeremy100",
-                                             @"app_version":app_version,
-                                             @"os_version":[[UIDevice currentDevice] systemVersion],
-                                             @"sdk_version":SDK_VERSION
-                                             };
+        NSDictionary *registrationParams = [self clientIdentityInfo];
         NSLog(@"[PARAMS] %@",registrationParams);
         [socket emit:@"client-identify" with:@[registrationParams]];
     }];
     
     [socket connect];
-
+    
     self.socket = socket;
 }
 
@@ -131,9 +142,9 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
     if (![self localServerEndpoint]) { return; }
     if ([[self socket] status] != SocketIOStatusConnected) { return; }
     
-    NSData *nsjson = [NSJSONSerialization dataWithJSONObject:message.log options:0 error:&error];
-    NSData *mpjson = [MPMessagePackWriter writeObject:message.log error:&error];
-
+    NSData *nsjson = [NSJSONSerialization dataWithJSONObject:[message getLog] options:0 error:&error];
+    NSData *mpjson = [MPMessagePackWriter writeObject:[message getLog] error:&error];
+    
     NSLog(@"comparing sizes nsjson: %lu vs mpjson: %lu", (unsigned long)nsjson.length, (unsigned long)mpjson.length);
     
     [self.socket emit:@"log" with:@[mpjson]];
@@ -195,9 +206,10 @@ void SCKLog(NSString *format, ...) {
     va_start (ap, format);
     
     NSString *log = [[NSString alloc] initWithFormat:format arguments:ap];
-    NSError *error = [NSError new];
+    NSLog(@"log %@", log);
+    NSError *error = nil; //? hm dangerous what say you?
     SCKLogMessage *message = [[SCKLogMessage alloc] init];
-    [message setLog:@{@"c-log":log}];
+    [message setLog:@{@"log":log}];
     [[SCKLogger shared] writeLog:message error:error];
     
     va_end (ap);
