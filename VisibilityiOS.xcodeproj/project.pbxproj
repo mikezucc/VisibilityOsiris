@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0E83F5572080CF3800AEA4ED /* SCKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */; };
-		0E83F5582080CF3800AEA4ED /* SCKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */; };
+		0E83F5582080CF3800AEA4ED /* SCKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0ECD851A2080314C00A1E2E4 /* VisibilityiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0ECD85232080331C00A1E2E4 /* VisibilitySocketLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */; };
 		25F656C78B4B4C791F17F763 /* Pods_VisibilityiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DFE16A67C00127F12AE49D3 /* Pods_VisibilityiOS.framework */; };
 /* End PBXBuildFile section */
