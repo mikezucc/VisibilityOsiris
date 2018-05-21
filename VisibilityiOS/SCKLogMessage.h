@@ -15,4 +15,7 @@
 - (void)setLog:(NSDictionary <NSString *, NSObject *>*) log;
 - (NSDictionary <NSString *, NSObject *>*)getLog;
 
+- (NSArray *)friendlifyNSArray:(NSArray *)array;
+- (NSDictionary *)friendlifyNSDictionary:(NSDictionary *)dictionary;
+
 @end

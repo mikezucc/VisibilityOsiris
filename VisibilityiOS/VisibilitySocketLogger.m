@@ -13,11 +13,13 @@
      \__\/         \__\/         \__\/                       \__\/         \__\/
  */
 
-#import <VisibilityiOS/VisibilitySocketLogger.h>
+#import "VisibilitySocketLogger.h"
 
 #import <Foundation/Foundation.h>
 
-@import MPMessagePack;
+#import <MPMessagePack/MPMessagePack.h>
+
+#import "UIDevice+UniqueDeviceIdentifier.h"
 
 @import SocketIO;
 
@@ -84,18 +86,20 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
 }
 
 - (NSDictionary *)clientIdentityInfo {
-    NSString *device_identifier = [self device_identifier];
+//    NSString *device_identifier = [self device_identifier]; 
     NSString *app_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     return @{
              @"api_key": [self getAPIKey],
              @"team_identifier":[self getAPIKey],
-             @"device_identifier":device_identifier,
+             @"device_identifier":[[UIDevice currentDevice] serviceIdentifier],
              @"human_name":[[UIDevice currentDevice] model],
              @"reported_type":[[UIDevice currentDevice] model],
              @"username":@"jeremy100",
              @"app_version":app_version,
+			 @"app_build_number":TI_BUILD_NUMBER,
              @"os_version":[[UIDevice currentDevice] systemVersion],
-             @"sdk_version":SDK_VERSION
+             @"sdk_version":SDK_VERSION,
+			 @"bundle_identifier":[[NSBundle mainBundle] bundleIdentifier]
              };
 }
 
@@ -124,9 +128,9 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
     }
     
     self.manager = [[SocketManager alloc] initWithSocketURL:endpoint
-                                                     config:@{@"log": @YES, @"compress": @YES}];
+													 config:@{@"log": @YES, @"compress": @YES, @"forceWebsockets":@YES}];
     SocketIOClient* socket = self.manager.defaultSocket;
-    
+
     [socket on:@"ack" callback:^(NSArray* data, SocketAckEmitter* ack) {
         NSDictionary *registrationParams = [self clientIdentityInfo];
         NSLog(@"[PARAMS] %@",registrationParams);
@@ -141,13 +145,18 @@ NSString *kUserdefaultsEndpoint = @"sck_endpoint_osiris";
 - (void)writeLog:(SCKLogMessage *)message error:(NSError *)error {
     if (![self localServerEndpoint]) { return; }
     if ([[self socket] status] != SocketIOStatusConnected) { return; }
-    
-    NSData *nsjson = [NSJSONSerialization dataWithJSONObject:[message getLog] options:0 error:&error];
-    NSData *mpjson = [MPMessagePackWriter writeObject:[message getLog] error:&error];
-    
-    NSLog(@"comparing sizes nsjson: %lu vs mpjson: %lu", (unsigned long)nsjson.length, (unsigned long)mpjson.length);
-    
-    [self.socket emit:@"log" with:@[mpjson]];
+
+	@try {
+		NSData *nsjson = [NSJSONSerialization dataWithJSONObject:[message getLog] options:0 error:&error];
+		NSData *mpjson = [MPMessagePackWriter writeObject:[message getLog] error:&error];
+
+		NSLog(@"comparing sizes nsjson: %lu vs mpjson: %lu", (unsigned long)nsjson.length, (unsigned long)mpjson.length);
+
+		[self.socket emit:@"log" with:@[mpjson]];
+	} @catch (NSException *exception) {
+		NSData *mpjson = [MPMessagePackWriter writeObject:@{@"ENCODING_ERROR":[exception debugDescription]} error:&error];
+		[self.socket emit:@"log" with:@[mpjson]];
+	} @finally {}
 }
 
 - (NSString *)humanReadableCode:(SCKLoggerErrorCode)code {
