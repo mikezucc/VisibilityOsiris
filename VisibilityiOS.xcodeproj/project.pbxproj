@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0E83F5572080CF3800AEA4ED /* SCKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */; };
 		0E83F5582080CF3800AEA4ED /* SCKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0EA9194920B6834B006B63C1 /* VisibilityLongTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA9194720B6834B006B63C1 /* VisibilityLongTerm.m */; };
+		0EA9194A20B6834B006B63C1 /* VisibilityLongTerm.h in Headers */ = {isa = PBXBuildFile; fileRef = 0EA9194820B6834B006B63C1 /* VisibilityLongTerm.h */; };
 		0ECD851A2080314C00A1E2E4 /* VisibilityiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0ECD85232080331C00A1E2E4 /* VisibilitySocketLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */; };
@@ -30,6 +32,8 @@
 /* Begin PBXFileReference section */
 		0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKLogMessage.m; sourceTree = "<group>"; };
 		0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKLogMessage.h; sourceTree = "<group>"; };
+		0EA9194720B6834B006B63C1 /* VisibilityLongTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisibilityLongTerm.m; sourceTree = "<group>"; };
+		0EA9194820B6834B006B63C1 /* VisibilityLongTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisibilityLongTerm.h; sourceTree = "<group>"; };
 		0ECD85152080314C00A1E2E4 /* VisibilityiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VisibilityiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisibilityiOS.h; sourceTree = "<group>"; };
 		0ECD85192080314C00A1E2E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 				0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */,
 				0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */,
 				0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */,
+				0EA9194820B6834B006B63C1 /* VisibilityLongTerm.h */,
+				0EA9194720B6834B006B63C1 /* VisibilityLongTerm.m */,
 				0ECD85192080314C00A1E2E4 /* Info.plist */,
 			);
 			path = VisibilityiOS;
@@ -109,6 +115,7 @@
 			files = (
 				0ECD851A2080314C00A1E2E4 /* VisibilityiOS.h in Headers */,
 				0E83F5582080CF3800AEA4ED /* SCKLogMessage.h in Headers */,
+				0EA9194A20B6834B006B63C1 /* VisibilityLongTerm.h in Headers */,
 				0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -204,6 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EA9194920B6834B006B63C1 /* VisibilityLongTerm.m in Sources */,
 				0E83F5572080CF3800AEA4ED /* SCKLogMessage.m in Sources */,
 				0ECD85232080331C00A1E2E4 /* VisibilitySocketLogger.m in Sources */,
 			);

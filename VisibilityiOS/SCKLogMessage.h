@@ -12,10 +12,8 @@
 
 // returns NO if the message is not properly formatted
 // MUST contain JSON encodable objects
-- (void)setLog:(NSDictionary <NSString *, NSObject *>*) log;
-- (NSDictionary <NSString *, NSObject *>*)getLog;
+-(void)setLog:(NSDictionary <NSString *, NSObject *>*) log;
 
-- (NSArray *)friendlifyNSArray:(NSArray *)array;
-- (NSDictionary *)friendlifyNSDictionary:(NSDictionary *)dictionary;
+@property (strong, nonatomic, readonly) NSDictionary <NSString *, NSObject *>* log;
 
 @end
