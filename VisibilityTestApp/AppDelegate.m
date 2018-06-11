@@ -26,7 +26,7 @@
     
     NSString *thing = @"http://ec2-13-56-158-108.us-west-1.compute.amazonaws.com:3003/";
     [[SCKLogger shared] configureWithEndpoint:thing];
-    [[SCKLogger shared] configureWithAPIKey:@"53ebd5ee9d045bbf1b1746ba1ee4bc4786dee9e687be83600938c6d07bb8"];
+    [[SCKLogger shared] configureWithAPIKey:@"396493a70786b9a3738ee99eee745875c7042c1f48b76c013a645a37592b"];
     
     SCKLog(@"%s %@",__FUNCTION__,self);
     
