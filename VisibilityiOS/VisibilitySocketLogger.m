@@ -28,6 +28,8 @@
 @property (strong, nonatomic) SocketManager *manager;
 @property (strong, nonatomic) VisibilityLongTerm *longTerm;
 
+@property (strong, nonatomic) NSString *sessionId;
+
 @property (strong, nonatomic) NSURLSession *logSession;
 @end
 
@@ -92,6 +94,13 @@ NSString *kUserDefaultsActive = @"sck_active";
     return [[self sckDefaults] boolForKey:kUserDefaultsActive];
 }
 
+- (NSString *)sessionIdentifier {
+    if (self.sessionId != nil) {
+        self.sessionId = [self generateRandomString];
+    }
+    return self.sessionId;
+}
+
 // I know this is redundant, but you'll thank me when you start trying to make tectonic
 // shifts to the way this thing behaves a year from now
 - (NSURL * _Nullable)localServerEndpoint { return [self endpoint:nil]; }
@@ -142,7 +151,8 @@ NSString *kUserDefaultsActive = @"sck_active";
                                              @"username":@"jeremy100",
                                              @"app_version":app_version,
                                              @"os_version":[[UIDevice currentDevice] systemVersion],
-                                             @"sdk_version":SDK_VERSION
+                                             @"sdk_version":SDK_VERSION,
+                                             @"session_identifier":[self sessionIdentifier]
                                              };
         NSLog(@"[PARAMS] %@",registrationParams);
         [socket emit:@"client-identify" with:@[registrationParams]];
@@ -172,12 +182,18 @@ NSString *kUserDefaultsActive = @"sck_active";
         NSLog(@"[Visibility] Cache is empty, can not flush on application close");
         return;
     }
+    
+    NSString *existingAPIKey = [self getAPIKey];
 
     NSMutableArray *cacheFriendly = [[NSMutableArray alloc] initWithCapacity:cache.count];
     [cache enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SCKLogMessage *message = (SCKLogMessage *)obj;
         [cacheFriendly addObject:message.log];
     }];
+    NSMutableDictionary *submissionPayload = [[NSMutableDictionary alloc] init];
+    [submissionPayload setObject:cacheFriendly forKey:@"messages"];
+    [submissionPayload setObject:existingAPIKey forKey:@"api_key"];
+    [submissionPayload setObject:[self sessionIdentifier] forKey:@"session_identifier"];
     NSError *encodingError;
     NSData *mpjson = [MPMessagePackWriter writeObject:cacheFriendly error:&encodingError];
     if (encodingError) {
@@ -205,8 +221,7 @@ NSString *kUserDefaultsActive = @"sck_active";
 
 // UTILItitTy
 
-- (NSString *)resetDeviceIdentifier
-{
+- (NSString *)generateRandomString {
     static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY";
     static NSString *digits = @"0123456789";
     NSMutableString *s = [NSMutableString stringWithCapacity:8];
@@ -228,6 +243,11 @@ NSString *kUserDefaultsActive = @"sck_active";
         
     }
     NSLog(@"s-->%@",s);
+}
+
+- (NSString *)resetDeviceIdentifier
+{
+    NSString *s = [self generateRandomString];
     
     [[self sckDefaults] setObject:s forKey:kUserDefaultsSCKIdentifier];
     
