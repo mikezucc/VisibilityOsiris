@@ -13,6 +13,7 @@
 @interface VisibilityLongTerm : NSObject
 
 - (id)initAndWithCache:(NSString *)cacheIdentifier;
+- (void)identify;
 
 - (void)receiveNewMessage:(SCKLogMessage *)message;
 - (NSArray <SCKLogMessage *>*)cacheDumpAndClear:(BOOL)clearCache;

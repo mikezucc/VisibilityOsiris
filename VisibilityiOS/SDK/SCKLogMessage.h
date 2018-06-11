@@ -12,7 +12,9 @@
 
 // returns NO if the message is not properly formatted
 // MUST contain JSON encodable objects
--(void)setLog:(NSDictionary <NSString *, NSObject *>*) log;
+- (void)setLog:(NSDictionary <NSString *, NSObject *>*) log;
+
+- (NSDictionary *)full;
 
 @property (strong, nonatomic, readonly) NSDictionary <NSString *, NSObject *>* log;
 
