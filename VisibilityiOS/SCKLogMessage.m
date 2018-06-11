@@ -9,15 +9,18 @@
 #import "SCKLogMessage.h"
 
 @interface SCKLogMessage ()
-@property (strong, nonatomic) NSDictionary <NSString *, NSObject *>* log;
+@property (strong, nonatomic) NSDictionary <NSString *, NSObject *>* internalLog;
 @end
 
 @implementation SCKLogMessage
 
 -(void)setLog:(NSDictionary <NSString *, NSObject *>*)log {
-    self.log = [log copy];
+    self.internalLog = log;
 }
 
+- (NSDictionary<NSString *,NSObject *> *)log {
+    return self.internalLog;
+}
 
 
 @end

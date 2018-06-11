@@ -19,7 +19,7 @@
 
 #import <Foundation/Foundation.h>
 
-@import MPMessagePack;
+#import <MPMessagePack/MPMessagePack.h>
 
 @import SocketIO;
 
@@ -50,22 +50,22 @@ NSString *kUserDefaultsActive = @"sck_active";
 - (void)configureWithAPIKey:(NSString *)apiKey {
     if (apiKey == nil) { return; }
     NSString *existingAPIKey = [self getAPIKey];
-    if (existingAPIKey && ![existingAPIKey isEqualToString:apiKey]) {
+    if (![existingAPIKey isEqualToString:apiKey]) {
         [[self sckDefaults] setObject:apiKey forKey:kUserDefaultsAPIKey];
-        NSString *endpoint = [self userDefinedEndpoint];
-        if (endpoint && endpoint.length) {
-            [self initiateSocket:[self endpoint:endpoint]];
-        }
     }
+    [self initiateSocket:[self endpoint:nil]];
 }
 
 // Reinitialize socket when the endpoint is modified and different
 - (void)configureWithEndpoint:(NSString *)endpoint {
     if (endpoint == nil) { return; }
     NSString *existingEndpoint = [self userDefinedEndpoint];
-    if (existingEndpoint && ![existingEndpoint isEqualToString:endpoint]) {
+    if (![existingEndpoint isEqualToString:endpoint]) {
         [[self sckDefaults] setObject:endpoint forKey:kUserDefaultsEndpoint];
-        [self initiateSocket:[self endpoint:endpoint]];
+    }
+    NSString *existingAPIKey = [self getAPIKey];
+    if (existingAPIKey && existingAPIKey.length) {
+        [self initiateSocket:[self endpoint:nil]];
     }
 }
 
@@ -74,8 +74,12 @@ NSString *kUserDefaultsActive = @"sck_active";
     return [[self sckDefaults] objectForKey:kUserDefaultsEndpoint];
 }
 
-- (NSURL * _Nonnull)endpoint:(NSString * _Nullable)path {
-    NSURLComponents *components = [[NSURLComponents alloc] initWithString:[self userDefinedEndpoint]];
+- (NSURL *)endpoint:(NSString * _Nullable)path {
+    NSString *base = [self userDefinedEndpoint];
+    if (base == nil) {
+        return nil;
+    }
+    NSURLComponents *components = [[NSURLComponents alloc] initWithString:base];
     if (path) { components.path = path; }
     return [components URL];
 }
@@ -97,10 +101,10 @@ NSString *kUserDefaultsActive = @"sck_active";
     static SCKLogger *logger;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        
         logger = [[SCKLogger alloc] init];
         logger.session = [NSString stringWithFormat:@"%@",[NSDate date]];
         logger.longTerm = [[VisibilityLongTerm alloc] initAndWithCache:nil];
+        [[logger sckDefaults] setObject:@YES forKey:kUserDefaultsActive];
     });
     return logger;
 }
@@ -114,6 +118,10 @@ NSString *kUserDefaultsActive = @"sck_active";
     
     if (self.manager) {
         [self.manager disconnect];
+    }
+
+    if (endpoint == nil) {
+        return;
     }
     
     self.manager = [[SocketManager alloc] initWithSocketURL:endpoint
@@ -154,7 +162,7 @@ NSString *kUserDefaultsActive = @"sck_active";
         //NSLog(@"comparing sizes nsjson: %lu vs mpjson: %lu", (unsigned long)nsjson.length, (unsigned long)mpjson.length);
         [self.socket emit:@"log" with:@[mpjson]];
     } else {
-        [self.longTerm receiveNewMessage:[message copy]];
+        [self.longTerm receiveNewMessage:message];
     }
 }
 
@@ -238,7 +246,7 @@ void SCKLog(NSString *format, ...) {
     va_start (ap, format);
     
     NSString *log = [[NSString alloc] initWithFormat:format arguments:ap];
-    NSError *error = [NSError new];
+    NSError *error = nil;
     SCKLogMessage *message = [[SCKLogMessage alloc] init];
     [message setLog:@{@"c-log":log}];
     [[SCKLogger shared] writeLog:message error:error];
