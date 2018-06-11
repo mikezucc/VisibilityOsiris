@@ -37,7 +37,8 @@
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-    NSLog(@"[visibility] [longterm] %@ %@", dataTask, data);
+    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"[visibility] [longterm] %@ %@", dataTask, dataString);
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
@@ -48,12 +49,13 @@
     NSMutableDictionary *submissionPayload = [[NSMutableDictionary alloc] init];
     [submissionPayload setObject:[[SCKLogger shared] client_identity_info] forKey:@"client_identity_info"];
     NSError *encodingError;
-    NSData *mpjson = [MPMessagePackWriter writeObject:submissionPayload error:&encodingError];
+    NSData *mpjson = [NSJSONSerialization dataWithJSONObject:submissionPayload options:NSJSONWritingPrettyPrinted error:&encodingError];
     if (encodingError) {
         NSLog(@"[Visibility] Cache failed to encode with error %@", encodingError);
         return;
     }
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[[SCKLogger shared] endpoint:@"passive-log"]];
+    NSURL *url = [[SCKLogger shared] endpoint:@"/app/identify/"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPBody = mpjson;
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -74,7 +76,8 @@
     NSArray *array = [self.messages copy];
     self.messages = [[NSMutableArray alloc] init];
     if (clearCache) {
-        
+        NSError *delError;
+        [[NSFileManager defaultManager] removeItemAtPath:[self dataFilePath] error:&delError];
     }
 
     NSString *existingAPIKey = [[SCKLogger shared] getAPIKey];
@@ -89,12 +92,13 @@
     [submissionPayload setObject:existingAPIKey forKey:@"api_key"];
     [submissionPayload setObject:[[SCKLogger shared] sessionIdentifier] forKey:@"session_identifier"];
     NSError *encodingError;
-    NSData *mpjson = [MPMessagePackWriter writeObject:submissionPayload error:&encodingError];
+    NSData *mpjson = [NSJSONSerialization dataWithJSONObject:submissionPayload options:NSJSONWritingPrettyPrinted error:&encodingError];
     if (encodingError) {
         NSLog(@"[Visibility] Cache failed to encode with error %@", encodingError);
         return array;
     }
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[[SCKLogger shared] endpoint:@"passive-log"]];
+    NSURL *url = [[SCKLogger shared] endpoint:@"/app/passive/"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPBody = mpjson;
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
