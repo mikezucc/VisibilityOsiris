@@ -15,7 +15,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <VisibilityiOS/SCKLogMessage.h>
+#import "SCKLogMessage.h"
 
 typedef enum : NSUInteger {
     UnconfiguredAPIKey,
@@ -28,7 +28,11 @@ typedef enum : NSUInteger {
 - (void)errorOccurred:(SCKLoggerErrorCode)code;
 @end
 
-@interface SCKLogger: NSObject
+@protocol SCKLoggerLifecycleObserver <NSObject>
+- (void)applicationDidEnterBackground;
+@end
+
+@interface SCKLogger: NSObject <SCKLoggerLifecycleObserver>
 
 // Delegate
 @property (weak, nonatomic) id<SCKLoggerDelegate> delegate;

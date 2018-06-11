@@ -10,12 +10,19 @@ DEPENDENCIES:
   - MPMessagePack
   - Socket.IO-Client-Swift (~> 13.1.3)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - GHODictionary
+    - MPMessagePack
+    - Socket.IO-Client-Swift
+    - Starscream
+
 SPEC CHECKSUMS:
   GHODictionary: 225e042596a4b3d5b66b2b24250086b2f95514af
   MPMessagePack: 5251dcd15e0c626cc50c192bdfcb5af6004cedb4
   Socket.IO-Client-Swift: d30d6fd08a38ad2a182b090936a043bf512ab2de
   Starscream: f5da93fe6984c77b694366bf7299b7dc63a76f26
 
-PODFILE CHECKSUM: 1c596f49545b29696f0d543a9f9a87877412694e
+PODFILE CHECKSUM: d7f2addc366745a77fd0a4216108e795d0855c54
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3

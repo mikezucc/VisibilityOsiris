@@ -8,11 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		0E83F5572080CF3800AEA4ED /* SCKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */; };
-		0E83F5582080CF3800AEA4ED /* SCKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */; };
+		0E83F5582080CF3800AEA4ED /* SCKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0E90467720CEE1E8002DCD7A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90467620CEE1E8002DCD7A /* AppDelegate.m */; };
+		0E90467A20CEE1E8002DCD7A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90467920CEE1E8002DCD7A /* ViewController.m */; };
+		0E90467D20CEE1E8002DCD7A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E90467B20CEE1E8002DCD7A /* Main.storyboard */; };
+		0E90467F20CEE1E8002DCD7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E90467E20CEE1E8002DCD7A /* Assets.xcassets */; };
+		0E90468220CEE1E8002DCD7A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E90468020CEE1E8002DCD7A /* LaunchScreen.storyboard */; };
+		0E90468520CEE1E8002DCD7A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90468420CEE1E8002DCD7A /* main.m */; };
+		0E90468A20CEE2B8002DCD7A /* VisibilitySocketLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */; };
+		0E90468B20CEE2B8002DCD7A /* SCKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */; };
+		0E90468C20CEE2B8002DCD7A /* VisibilityLongTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA9194720B6834B006B63C1 /* VisibilityLongTerm.m */; };
+		0EA9194920B6834B006B63C1 /* VisibilityLongTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA9194720B6834B006B63C1 /* VisibilityLongTerm.m */; };
+		0EA9194A20B6834B006B63C1 /* VisibilityLongTerm.h in Headers */ = {isa = PBXBuildFile; fileRef = 0EA9194820B6834B006B63C1 /* VisibilityLongTerm.h */; };
 		0ECD851A2080314C00A1E2E4 /* VisibilityiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0ECD85232080331C00A1E2E4 /* VisibilitySocketLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */; };
 		25F656C78B4B4C791F17F763 /* Pods_VisibilityiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DFE16A67C00127F12AE49D3 /* Pods_VisibilityiOS.framework */; };
+		630FAFEDF0016BCFF749F246 /* Pods_VisibilityTestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B6F44C02CFF7A408FA454A8 /* Pods_VisibilityTestApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,17 +42,40 @@
 /* Begin PBXFileReference section */
 		0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCKLogMessage.m; sourceTree = "<group>"; };
 		0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCKLogMessage.h; sourceTree = "<group>"; };
+		0E90467320CEE1E8002DCD7A /* VisibilityTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisibilityTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0E90467520CEE1E8002DCD7A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		0E90467620CEE1E8002DCD7A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		0E90467820CEE1E8002DCD7A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		0E90467920CEE1E8002DCD7A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		0E90467C20CEE1E8002DCD7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0E90467E20CEE1E8002DCD7A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0E90468120CEE1E8002DCD7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0E90468320CEE1E8002DCD7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0E90468420CEE1E8002DCD7A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0EA9194720B6834B006B63C1 /* VisibilityLongTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisibilityLongTerm.m; sourceTree = "<group>"; };
+		0EA9194820B6834B006B63C1 /* VisibilityLongTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisibilityLongTerm.h; sourceTree = "<group>"; };
 		0ECD85152080314C00A1E2E4 /* VisibilityiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VisibilityiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisibilityiOS.h; sourceTree = "<group>"; };
 		0ECD85192080314C00A1E2E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisibilitySocketLogger.h; sourceTree = "<group>"; };
 		0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VisibilitySocketLogger.m; sourceTree = "<group>"; wrapsLines = 0; };
 		27D6EB0D0F724AC97128C1F5 /* Pods-VisibilityiOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisibilityiOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VisibilityiOS/Pods-VisibilityiOS.debug.xcconfig"; sourceTree = "<group>"; };
+		433C97A1C824693688D0A0FB /* Pods-VisibilityTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisibilityTestApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-VisibilityTestApp/Pods-VisibilityTestApp.release.xcconfig"; sourceTree = "<group>"; };
 		4F9AEAF7DF2E0253026B69D8 /* Pods-VisibilityiOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisibilityiOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-VisibilityiOS/Pods-VisibilityiOS.release.xcconfig"; sourceTree = "<group>"; };
 		5DFE16A67C00127F12AE49D3 /* Pods_VisibilityiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisibilityiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B6F44C02CFF7A408FA454A8 /* Pods_VisibilityTestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisibilityTestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8B5699C79BEA95609019E13 /* Pods-VisibilityTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisibilityTestApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VisibilityTestApp/Pods-VisibilityTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0E90467020CEE1E8002DCD7A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				630FAFEDF0016BCFF749F246 /* Pods_VisibilityTestApp.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0ECD85112080314C00A1E2E4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -52,10 +87,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E90467420CEE1E8002DCD7A /* VisibilityTestApp */ = {
+			isa = PBXGroup;
+			children = (
+				0E90467520CEE1E8002DCD7A /* AppDelegate.h */,
+				0E90467620CEE1E8002DCD7A /* AppDelegate.m */,
+				0E90467820CEE1E8002DCD7A /* ViewController.h */,
+				0E90467920CEE1E8002DCD7A /* ViewController.m */,
+				0E90467B20CEE1E8002DCD7A /* Main.storyboard */,
+				0E90467E20CEE1E8002DCD7A /* Assets.xcassets */,
+				0E90468020CEE1E8002DCD7A /* LaunchScreen.storyboard */,
+				0E90468320CEE1E8002DCD7A /* Info.plist */,
+				0E90468420CEE1E8002DCD7A /* main.m */,
+			);
+			path = VisibilityTestApp;
+			sourceTree = "<group>";
+		};
+		0E90468920CEE267002DCD7A /* SDK */ = {
+			isa = PBXGroup;
+			children = (
+				0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */,
+				0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */,
+				0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */,
+				0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */,
+				0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */,
+				0EA9194820B6834B006B63C1 /* VisibilityLongTerm.h */,
+				0EA9194720B6834B006B63C1 /* VisibilityLongTerm.m */,
+			);
+			path = SDK;
+			sourceTree = "<group>";
+		};
 		0ECD850B2080314C00A1E2E4 = {
 			isa = PBXGroup;
 			children = (
 				0ECD85172080314C00A1E2E4 /* VisibilityiOS */,
+				0E90467420CEE1E8002DCD7A /* VisibilityTestApp */,
 				0ECD85162080314C00A1E2E4 /* Products */,
 				2CE3AE35DD5D0939AADAB955 /* Pods */,
 				CB4817AEC24A4C63B85A62C2 /* Frameworks */,
@@ -66,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				0ECD85152080314C00A1E2E4 /* VisibilityiOS.framework */,
+				0E90467320CEE1E8002DCD7A /* VisibilityTestApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,11 +140,7 @@
 		0ECD85172080314C00A1E2E4 /* VisibilityiOS */ = {
 			isa = PBXGroup;
 			children = (
-				0ECD85182080314C00A1E2E4 /* VisibilityiOS.h */,
-				0ECD85202080331C00A1E2E4 /* VisibilitySocketLogger.h */,
-				0ECD85212080331C00A1E2E4 /* VisibilitySocketLogger.m */,
-				0E83F5562080CF3800AEA4ED /* SCKLogMessage.h */,
-				0E83F5552080CF3800AEA4ED /* SCKLogMessage.m */,
+				0E90468920CEE267002DCD7A /* SDK */,
 				0ECD85192080314C00A1E2E4 /* Info.plist */,
 			);
 			path = VisibilityiOS;
@@ -88,6 +151,8 @@
 			children = (
 				27D6EB0D0F724AC97128C1F5 /* Pods-VisibilityiOS.debug.xcconfig */,
 				4F9AEAF7DF2E0253026B69D8 /* Pods-VisibilityiOS.release.xcconfig */,
+				B8B5699C79BEA95609019E13 /* Pods-VisibilityTestApp.debug.xcconfig */,
+				433C97A1C824693688D0A0FB /* Pods-VisibilityTestApp.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -96,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				5DFE16A67C00127F12AE49D3 /* Pods_VisibilityiOS.framework */,
+				6B6F44C02CFF7A408FA454A8 /* Pods_VisibilityTestApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -109,6 +175,7 @@
 			files = (
 				0ECD851A2080314C00A1E2E4 /* VisibilityiOS.h in Headers */,
 				0E83F5582080CF3800AEA4ED /* SCKLogMessage.h in Headers */,
+				0EA9194A20B6834B006B63C1 /* VisibilityLongTerm.h in Headers */,
 				0ECD85222080331C00A1E2E4 /* VisibilitySocketLogger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,6 +183,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		0E90467220CEE1E8002DCD7A /* VisibilityTestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0E90468820CEE1E8002DCD7A /* Build configuration list for PBXNativeTarget "VisibilityTestApp" */;
+			buildPhases = (
+				E54BF627310683D208812917 /* [CP] Check Pods Manifest.lock */,
+				0E90466F20CEE1E8002DCD7A /* Sources */,
+				0E90467020CEE1E8002DCD7A /* Frameworks */,
+				0E90467120CEE1E8002DCD7A /* Resources */,
+				A7AFE0C4A5F8EAB5FC53294B /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VisibilityTestApp;
+			productName = VisibilityTestApp;
+			productReference = 0E90467320CEE1E8002DCD7A /* VisibilityTestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 		0ECD85142080314C00A1E2E4 /* VisibilityiOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0ECD851D2080314C00A1E2E4 /* Build configuration list for PBXNativeTarget "VisibilityiOS" */;
@@ -125,7 +211,6 @@
 				0ECD85112080314C00A1E2E4 /* Frameworks */,
 				0ECD85122080314C00A1E2E4 /* Headers */,
 				0ECD85132080314C00A1E2E4 /* Resources */,
-				75A2ABCE3E0FE1D8B7C97D21 /* [CP] Copy Pods Resources */,
 				0E83F4162080B1F800AEA4ED /* CopyFiles */,
 			);
 			buildRules = (
@@ -146,6 +231,10 @@
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = SnarfSnarf;
 				TargetAttributes = {
+					0E90467220CEE1E8002DCD7A = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 					0ECD85142080314C00A1E2E4 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
@@ -158,6 +247,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 0ECD850B2080314C00A1E2E4;
 			productRefGroup = 0ECD85162080314C00A1E2E4 /* Products */;
@@ -165,11 +255,22 @@
 			projectRoot = "";
 			targets = (
 				0ECD85142080314C00A1E2E4 /* VisibilityiOS */,
+				0E90467220CEE1E8002DCD7A /* VisibilityTestApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0E90467120CEE1E8002DCD7A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E90468220CEE1E8002DCD7A /* LaunchScreen.storyboard in Resources */,
+				0E90467F20CEE1E8002DCD7A /* Assets.xcassets in Resources */,
+				0E90467D20CEE1E8002DCD7A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0ECD85132080314C00A1E2E4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -198,28 +299,69 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		75A2ABCE3E0FE1D8B7C97D21 /* [CP] Copy Pods Resources */ = {
+		A7AFE0C4A5F8EAB5FC53294B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-VisibilityTestApp/Pods-VisibilityTestApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GHODictionary/GHODictionary.framework",
+				"${BUILT_PRODUCTS_DIR}/MPMessagePack/MPMessagePack.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GHODictionary.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MPMessagePack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VisibilityiOS/Pods-VisibilityiOS-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VisibilityTestApp/Pods-VisibilityTestApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E54BF627310683D208812917 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VisibilityTestApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0E90466F20CEE1E8002DCD7A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E90468A20CEE2B8002DCD7A /* VisibilitySocketLogger.m in Sources */,
+				0E90467A20CEE1E8002DCD7A /* ViewController.m in Sources */,
+				0E90468520CEE1E8002DCD7A /* main.m in Sources */,
+				0E90468C20CEE2B8002DCD7A /* VisibilityLongTerm.m in Sources */,
+				0E90468B20CEE2B8002DCD7A /* SCKLogMessage.m in Sources */,
+				0E90467720CEE1E8002DCD7A /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0ECD85102080314C00A1E2E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EA9194920B6834B006B63C1 /* VisibilityLongTerm.m in Sources */,
 				0E83F5572080CF3800AEA4ED /* SCKLogMessage.m in Sources */,
 				0ECD85232080331C00A1E2E4 /* VisibilitySocketLogger.m in Sources */,
 			);
@@ -227,7 +369,56 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		0E90467B20CEE1E8002DCD7A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0E90467C20CEE1E8002DCD7A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		0E90468020CEE1E8002DCD7A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0E90468120CEE1E8002DCD7A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		0E90468620CEE1E8002DCD7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8B5699C79BEA95609019E13 /* Pods-VisibilityTestApp.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4EGK755NQN;
+				INFOPLIST_FILE = VisibilityTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = SnarfSnarf.VisibilityTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0E90468720CEE1E8002DCD7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433C97A1C824693688D0A0FB /* Pods-VisibilityTestApp.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4EGK755NQN;
+				INFOPLIST_FILE = VisibilityTestApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = SnarfSnarf.VisibilityTestApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		0ECD851B2080314C00A1E2E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -394,6 +585,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0E90468820CEE1E8002DCD7A /* Build configuration list for PBXNativeTarget "VisibilityTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0E90468620CEE1E8002DCD7A /* Debug */,
+				0E90468720CEE1E8002DCD7A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0ECD850F2080314C00A1E2E4 /* Build configuration list for PBXProject "VisibilityiOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
