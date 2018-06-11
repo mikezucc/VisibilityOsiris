@@ -131,13 +131,14 @@ NSString *kUserDefaultsActive = @"sck_active";
     if ([self getAPIKey] == nil) {
         return;
     }
+
+    [self.longTerm cacheDumpAndClear:YES];
     
     if ([self appShouldBeActive] == false) {
         if (self.didIdentify == NO) {
             self.didIdentify = YES;
             [self.longTerm identify];
         }
-        [self.longTerm cacheDumpAndClear:YES];
         return;
     }
     
@@ -169,7 +170,8 @@ NSString *kUserDefaultsActive = @"sck_active";
       @"app_version":app_version,
       @"os_version":[[UIDevice currentDevice] systemVersion],
       @"sdk_version":SDK_VERSION,
-      @"session_identifier":[self sessionIdentifier]
+      @"session_identifier":[self sessionIdentifier],
+      @"bundle_identifier":[[NSBundle mainBundle] bundleIdentifier]
       };
 }
 
@@ -246,10 +248,6 @@ NSString *kUserDefaultsActive = @"sck_active";
 @end
 
 void SCKLog(NSString *format, ...) {
-    if (![[SCKLogger shared] localServerEndpoint]) { return; }
-    
-    if ([[[SCKLogger shared] socket] status] != SocketIOStatusConnected) { return; }
-    
     // reference from https://code.tutsplus.com/tutorials/quick-tip-customize-nslog-for-easier-debugging--mobile-19066
     va_list ap;
     va_start (ap, format);

@@ -30,8 +30,8 @@
     
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.stanky.leg.nation"];
     self.logSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[[NSOperationQueue alloc] init]];
-    
-    [self initializeFromCache];
+
+    self.messages = [[NSMutableArray alloc] init];
 
     return self;
 }
@@ -69,33 +69,28 @@
     }
 }
 
-- (NSArray <SCKLogMessage *>*)cacheDumpAndClear:(BOOL)clearCache {
-    if (!self.messages || [self.messages count] == 0) {
+- (NSArray *)cacheDumpAndClear:(BOOL)clearCache {
+    NSArray *cache = [self xeroxCache];
+    if (!cache || [cache count] == 0) {
         return @[];
     }
-    NSArray *array = [self.messages copy];
-    self.messages = [[NSMutableArray alloc] init];
     if (clearCache) {
         NSError *delError;
         [[NSFileManager defaultManager] removeItemAtPath:[self dataFilePath] error:&delError];
+        NSLog(@"[visibility] failed to delete the cache file %@", delError);
     }
 
     NSString *existingAPIKey = [[SCKLogger shared] getAPIKey];
 
-    NSMutableArray *cacheFriendly = [[NSMutableArray alloc] initWithCapacity:array.count];
-    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        SCKLogMessage *message = (SCKLogMessage *)obj;
-        [cacheFriendly addObject:[message full]];
-    }];
     NSMutableDictionary *submissionPayload = [[NSMutableDictionary alloc] init];
-    [submissionPayload setObject:cacheFriendly forKey:@"messages"];
+    [submissionPayload setObject:cache forKey:@"messages"];
     [submissionPayload setObject:existingAPIKey forKey:@"api_key"];
     [submissionPayload setObject:[[SCKLogger shared] sessionIdentifier] forKey:@"session_identifier"];
     NSError *encodingError;
     NSData *mpjson = [NSJSONSerialization dataWithJSONObject:submissionPayload options:NSJSONWritingPrettyPrinted error:&encodingError];
     if (encodingError) {
         NSLog(@"[Visibility] Cache failed to encode with error %@", encodingError);
-        return array;
+        return cache;
     }
     NSURL *url = [[SCKLogger shared] endpoint:@"/app/passive/"];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
@@ -104,7 +99,7 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [[self.logSession dataTaskWithRequest:request] resume];
 
-    return array;
+    return cache;
 }
 
 - (void)writeCache {
@@ -118,26 +113,25 @@
             [encodable addObject:[message full]];
         }];
         NSData *data = [NSJSONSerialization dataWithJSONObject:encodable options:NSJSONWritingPrettyPrinted error:&error];
+        NSLog(@"[visibility] cache write encode error %@",error);
         [data writeToFile:[self dataFilePath] atomically:YES];
     });
 }
 
-- (void)initializeFromCache {
+- (NSArray *)xeroxCache {
     NSString *logsCacheFilePath = [self dataFilePath];
     NSData *data = [[NSData alloc] initWithContentsOfFile:logsCacheFilePath];
     if (!data) {
-        self.messages = [[NSMutableArray alloc] init];
         NSLog(@"[Visibility] Warning: No log cache file found");
-        return;
+        return @[];
     }
     NSError *error;
     NSArray *cache = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     if (error) {
-        self.messages = [[NSMutableArray alloc] init];
         NSLog(@"[Visibility] Warning: No log cache file found");
-        return;
+        return @[];
     }
-    self.messages = [[NSMutableArray alloc] initWithArray:cache];
+    return cache;
 }
 
 -(void)removeFile:(NSString *)fileName
@@ -154,7 +148,7 @@
 }
 
 - (NSString *)dataFilePath {
-    return [[self cacheDirectoryPath] stringByAppendingPathComponent:@"VisibilityLogs.json"];
+    return [[self cacheDirectoryPath] stringByAppendingPathComponent:@"/VisibilityLogs.json"];
 }
 
 - (NSString *)cacheDirectoryPath {
