@@ -35,25 +35,33 @@ typedef enum : NSUInteger {
 @interface SCKLogger: NSObject <SCKLoggerLifecycleObserver>
 
 // Delegate
-@property (weak, nonatomic) id<SCKLoggerDelegate> delegate;
+@property (weak, nonatomic, nullable) id <SCKLoggerDelegate> delegate;
 
 // Swangleton
-+ (SCKLogger *)shared;
++ (SCKLogger * _Nonnull)shared;
+- (NSString * _Nullable)sessionIdentifier;
+- (NSURL * _Nullable)endpoint:(NSString * _Nullable)path;
 
 // Configuring the SDK
-- (void)configureWithAPIKey:(NSString *)apiKey;
+- (void)configureWithAPIKey:(NSString * _Nullable)apiKey;
+- (NSString * _Nullable)getAPIKey;
 // Modifying the endpoint will provoke the socket
 // to reinitialize to new endpoint on the fly
-- (void)configureWithEndpoint:(NSString *)endpoint;
+- (void)configureWithEndpoint:(NSString * _Nullable)endpoint;
 
 // Logging
-- (void)writeLog:(SCKLogMessage *)message error:(NSError *)error;
+- (void)writeLog:(SCKLogMessage * _Nullable)message error:(NSError * _Nullable)error;
+
+// Session identification
+- (NSDictionary * _Nullable)client_identity_info;
 
 // Convert SCKLoggerErrorCode to human readable
-- (NSString *)humanReadableCode:(SCKLoggerErrorCode)code;
+- (NSString * _Nullable)humanReadableCode:(SCKLoggerErrorCode)code;
 
-@property (strong, nonatomic) NSString *session;
+@property (strong, nonatomic) NSString * _Nullable session;
 @end
+
+NS_ASSUME_NONNULL_BEGIN
 
 #ifndef SCKLog_h
 #define SCKLog_h
@@ -62,3 +70,4 @@ void SCKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2) NS_NO_TAIL_CALL;
 
 #endif /* SCKLog_h */
 
+NS_ASSUME_NONNULL_END

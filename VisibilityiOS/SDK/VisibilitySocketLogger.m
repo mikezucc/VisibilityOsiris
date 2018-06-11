@@ -28,9 +28,9 @@
 @property (strong, nonatomic) SocketManager *manager;
 @property (strong, nonatomic) VisibilityLongTerm *longTerm;
 
-@property (strong, nonatomic) NSString *sessionId;
+@property (nonatomic) BOOL didIdentify;
 
-@property (strong, nonatomic) NSURLSession *logSession;
+@property (strong, nonatomic) NSString *sessionId;
 @end
 
 @implementation SCKLogger
@@ -95,7 +95,7 @@ NSString *kUserDefaultsActive = @"sck_active";
 }
 
 - (NSString *)sessionIdentifier {
-    if (self.sessionId != nil) {
+    if (self.sessionId == nil) {
         self.sessionId = [self generateRandomString];
     }
     return self.sessionId;
@@ -111,20 +111,15 @@ NSString *kUserDefaultsActive = @"sck_active";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         logger = [[SCKLogger alloc] init];
+        logger.didIdentify = NO;
         logger.session = [NSString stringWithFormat:@"%@",[NSDate date]];
         logger.longTerm = [[VisibilityLongTerm alloc] initAndWithCache:nil];
-        [[logger sckDefaults] setObject:@YES forKey:kUserDefaultsActive];
+        [[logger sckDefaults] setObject:@NO forKey:kUserDefaultsActive];
     });
     return logger;
 }
 
 - (void)initiateSocket:(NSURL *)endpoint {
-    if ([self appShouldBeActive] == false) {
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.stanky.leg.nation"];
-        self.logSession = [NSURLSession sessionWithConfiguration:configuration];
-        return;
-    }
-    
     if (self.manager) {
         [self.manager disconnect];
     }
@@ -133,27 +128,25 @@ NSString *kUserDefaultsActive = @"sck_active";
         return;
     }
     
+    if ([self getAPIKey] == nil) {
+        return;
+    }
+    
+    if ([self appShouldBeActive] == false) {
+        if (self.didIdentify == NO) {
+            self.didIdentify = YES;
+            [self.longTerm identify];
+        }
+        [self.longTerm cacheDumpAndClear:YES];
+        return;
+    }
+    
     self.manager = [[SocketManager alloc] initWithSocketURL:endpoint
-                                                     config:@{@"log": @YES, @"compress": @YES}];
+                                   config:@{@"log": @YES, @"compress": @YES}];
     SocketIOClient *socket = self.manager.defaultSocket;
     
-    NSString *app_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    
-    NSString *device_identifier = [[self sckDefaults] stringForKey:kUserDefaultsSCKIdentifier] ?: [self resetDeviceIdentifier];
-    
     [socket on:@"ack" callback:^(NSArray* data, SocketAckEmitter* ack) {
-        NSDictionary *registrationParams = @{
-                                             @"api_key":[self getAPIKey],
-                                             @"team_identifier":[self getAPIKey],
-                                             @"device_identifier":device_identifier,
-                                             @"human_name":[[UIDevice currentDevice] model],
-                                             @"reported_type":[[UIDevice currentDevice] model],
-                                             @"username":@"jeremy100",
-                                             @"app_version":app_version,
-                                             @"os_version":[[UIDevice currentDevice] systemVersion],
-                                             @"sdk_version":SDK_VERSION,
-                                             @"session_identifier":[self sessionIdentifier]
-                                             };
+        NSDictionary *registrationParams = [self client_identity_info];
         NSLog(@"[PARAMS] %@",registrationParams);
         [socket emit:@"client-identify" with:@[registrationParams]];
     }];
@@ -163,11 +156,28 @@ NSString *kUserDefaultsActive = @"sck_active";
     self.socket = socket;
 }
 
+- (NSDictionary *)client_identity_info {
+    NSString *app_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *device_identifier = [[self sckDefaults] stringForKey:kUserDefaultsSCKIdentifier] ?: [self resetDeviceIdentifier];
+    return @{
+      @"api_key":[self getAPIKey],
+      @"team_identifier":[self getAPIKey],
+      @"device_identifier":device_identifier,
+      @"human_name":[[UIDevice currentDevice] model],
+      @"reported_type":[[UIDevice currentDevice] model],
+      @"username":@"jeremy100",
+      @"app_version":app_version,
+      @"os_version":[[UIDevice currentDevice] systemVersion],
+      @"sdk_version":SDK_VERSION,
+      @"session_identifier":[self sessionIdentifier]
+      };
+}
+
 - (void)writeLog:(SCKLogMessage *)message error:(NSError *)error {
     if (![self localServerEndpoint]) { return; }
-    
+
     if ([self appShouldBeActive] && [[self socket] status] != SocketIOStatusConnected) {
-        NSData *mpjson = [MPMessagePackWriter writeObject:message.log error:&error];
+        NSData *mpjson = [MPMessagePackWriter writeObject:[message full] error:&error];
 //        NSData *nsjson = [NSJSONSerialization dataWithJSONObject:message.log options:0 error:&error];
         //NSLog(@"comparing sizes nsjson: %lu vs mpjson: %lu", (unsigned long)nsjson.length, (unsigned long)mpjson.length);
         [self.socket emit:@"log" with:@[mpjson]];
@@ -182,28 +192,6 @@ NSString *kUserDefaultsActive = @"sck_active";
         NSLog(@"[Visibility] Cache is empty, can not flush on application close");
         return;
     }
-    
-    NSString *existingAPIKey = [self getAPIKey];
-
-    NSMutableArray *cacheFriendly = [[NSMutableArray alloc] initWithCapacity:cache.count];
-    [cache enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        SCKLogMessage *message = (SCKLogMessage *)obj;
-        [cacheFriendly addObject:message.log];
-    }];
-    NSMutableDictionary *submissionPayload = [[NSMutableDictionary alloc] init];
-    [submissionPayload setObject:cacheFriendly forKey:@"messages"];
-    [submissionPayload setObject:existingAPIKey forKey:@"api_key"];
-    [submissionPayload setObject:[self sessionIdentifier] forKey:@"session_identifier"];
-    NSError *encodingError;
-    NSData *mpjson = [MPMessagePackWriter writeObject:cacheFriendly error:&encodingError];
-    if (encodingError) {
-        NSLog(@"[Visibility] Cache failed to encode with error %@", encodingError);
-    }
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[self endpoint:@"passive-log"]];
-    request.HTTPBody = mpjson;
-    request.HTTPMethod = @"POST";
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [[self.logSession dataTaskWithRequest:request] resume];
 }
 
 - (NSString *)humanReadableCode:(SCKLoggerErrorCode)code {
