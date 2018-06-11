@@ -243,6 +243,7 @@ NSString *kUserDefaultsActive = @"sck_active";
         
     }
     NSLog(@"s-->%@",s);
+    return s;
 }
 
 - (NSString *)resetDeviceIdentifier
