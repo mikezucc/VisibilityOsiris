@@ -5,3 +5,7 @@ target 'VisibilityiOS' do
     pod 'MPMessagePack'
 end
 
+target 'VisibilityTestApp' do
+    pod 'Socket.IO-Client-Swift', '~> 13.1.3'
+    pod 'MPMessagePack'
+end
