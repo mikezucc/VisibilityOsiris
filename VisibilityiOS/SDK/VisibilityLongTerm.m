@@ -14,16 +14,16 @@
 
 @interface VisibilityLongTerm () <NSURLSessionDelegate, NSURLSessionDataDelegate>
 @property (strong, nonatomic) NSMutableArray *messages;
-
 @property (strong, nonatomic) dispatch_queue_t writeQueue;
-
 @property (strong, nonatomic) NSURLSession *logSession;
+
+@property (weak, nonatomic) SCKLogger *logger;
 
 @end
 
 @implementation VisibilityLongTerm
 
-- (id)initAndWithCache:(NSString *)cacheIdentifier {
+- (id)initAndWithCache:(NSString *)cacheIdentifier logger:(SCKLogger *)logger {
     self = [super init];
     
     self.writeQueue = dispatch_queue_create("stanky.leg.nation.log.write", DISPATCH_QUEUE_SERIAL);
@@ -32,33 +32,36 @@
     self.logSession = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:[[NSOperationQueue alloc] init]];
 
     self.messages = [[NSMutableArray alloc] init];
+    
+    self.logger = logger;
 
     return self;
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"[visibility] [longterm] %@ %@", dataTask, dataString);
+    NSLog(@"[VISIBILITY] [longterm] %@ %@", dataTask, dataString);
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-    NSLog(@"[visibility] [longterm] %@ %@", task, error);
+    NSLog(@"[VISIBILITY] [longterm] %@ %@", task, error);
 }
 
 - (void)identify {
     NSMutableDictionary *submissionPayload = [[NSMutableDictionary alloc] init];
-    [submissionPayload setObject:[[SCKLogger shared] client_identity_info] forKey:@"client_identity_info"];
+    [submissionPayload setObject:[self.logger client_identity_info] forKey:@"client_identity_info"];
     NSError *encodingError;
     NSData *mpjson = [NSJSONSerialization dataWithJSONObject:submissionPayload options:NSJSONWritingPrettyPrinted error:&encodingError];
     if (encodingError) {
-        NSLog(@"[Visibility] Cache failed to encode with error %@", encodingError);
+        NSLog(@"[VISIBILITY] Cache failed to encode with error %@", encodingError);
         return;
     }
-    NSURL *url = [[SCKLogger shared] endpoint:@"/app/identify/"];
+    NSURL *url = [self.logger endpoint:@"/app/identify/"];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPBody = mpjson;
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:[NSString stringWithFormat:@"%lu",(unsigned long)mpjson.length] forHTTPHeaderField:@"Content-Length"];
     [[self.logSession dataTaskWithRequest:request] resume];
 }
 
@@ -77,26 +80,27 @@
     if (clearCache) {
         NSError *delError;
         [[NSFileManager defaultManager] removeItemAtPath:[self dataFilePath] error:&delError];
-        NSLog(@"[visibility] failed to delete the cache file %@", delError);
+        NSLog(@"[VISIBILITY] failed to delete the cache file %@", delError);
     }
 
-    NSString *existingAPIKey = [[SCKLogger shared] getAPIKey];
+    NSString *existingAPIKey = [self.logger getAPIKey];
 
     NSMutableDictionary *submissionPayload = [[NSMutableDictionary alloc] init];
     [submissionPayload setObject:cache forKey:@"messages"];
     [submissionPayload setObject:existingAPIKey forKey:@"api_key"];
-    [submissionPayload setObject:[[SCKLogger shared] sessionIdentifier] forKey:@"session_identifier"];
+    [submissionPayload setObject:[self.logger sessionIdentifier] forKey:@"session_identifier"];
     NSError *encodingError;
     NSData *mpjson = [NSJSONSerialization dataWithJSONObject:submissionPayload options:NSJSONWritingPrettyPrinted error:&encodingError];
     if (encodingError) {
-        NSLog(@"[Visibility] Cache failed to encode with error %@", encodingError);
+        NSLog(@"[VISIBILITY] Cache failed to encode with error %@", encodingError);
         return cache;
     }
-    NSURL *url = [[SCKLogger shared] endpoint:@"/app/passive/"];
+    NSURL *url = [self.logger endpoint:@"/app/passive/"];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.HTTPBody = mpjson;
     request.HTTPMethod = @"POST";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:[NSString stringWithFormat:@"%lu",(unsigned long)mpjson.length] forHTTPHeaderField:@"Content-Length"];
     [[self.logSession dataTaskWithRequest:request] resume];
 
     return cache;
@@ -113,7 +117,7 @@
             [encodable addObject:[message full]];
         }];
         NSData *data = [NSJSONSerialization dataWithJSONObject:encodable options:NSJSONWritingPrettyPrinted error:&error];
-        NSLog(@"[visibility] cache write encode error %@",error);
+        NSLog(@"[VISIBILITY] cache write encode error %@",error);
         [data writeToFile:[self dataFilePath] atomically:YES];
     });
 }
@@ -122,13 +126,13 @@
     NSString *logsCacheFilePath = [self dataFilePath];
     NSData *data = [[NSData alloc] initWithContentsOfFile:logsCacheFilePath];
     if (!data) {
-        NSLog(@"[Visibility] Warning: No log cache file found");
+        NSLog(@"[VISIBILITY] Warning: No log cache file found");
         return @[];
     }
     NSError *error;
     NSArray *cache = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     if (error) {
-        NSLog(@"[Visibility] Warning: No log cache file found");
+        NSLog(@"[VISIBILITY] Warning: No log cache file found");
         return @[];
     }
     return cache;
@@ -141,9 +145,9 @@
     NSError *error;
     BOOL result = [fileManager removeItemAtPath:filePath error:&error];
     if (error) {
-        NSLog(@"[Visibility] error: failed to remove cache: %@", error);
+        NSLog(@"[VISIBILITY] error: failed to remove cache: %@", error);
     } else {
-        NSLog(@"[Visibility] removed cache %@", result ? @"yes" : @"no");
+        NSLog(@"[VISIBILITY] removed cache %@", result ? @"yes" : @"no");
     }
 }
 

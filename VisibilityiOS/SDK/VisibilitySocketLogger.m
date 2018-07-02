@@ -37,6 +37,9 @@
 
 NSString *SDK_VERSION = @"0.0.1";
 
+NSString *k_API_KEY = @"24a5bd0b4d3e6a5a463787d6a8a53542f55bbb41f4f2254f4d5dae527baf";
+NSString *k_ENDPOINT = @"http://ec2-13-56-158-108.us-west-1.compute.amazonaws.com:3003/";
+
 /**
  User defaults config
  */
@@ -111,10 +114,13 @@ NSString *kUserDefaultsActive = @"sck_active";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         logger = [[SCKLogger alloc] init];
+        [[logger sckDefaults] setObject:k_API_KEY forKey:kUserDefaultsAPIKey];
+        [[logger sckDefaults] setObject:k_ENDPOINT forKey:kUserDefaultsEndpoint];
         logger.didIdentify = NO;
         logger.session = [NSString stringWithFormat:@"%@",[NSDate date]];
-        logger.longTerm = [[VisibilityLongTerm alloc] initAndWithCache:nil];
+        logger.longTerm = [[VisibilityLongTerm alloc] initAndWithCache:nil logger:logger];
         [[logger sckDefaults] setObject:@NO forKey:kUserDefaultsActive];
+        [logger initiateSocket:nil];
     });
     return logger;
 }
@@ -123,22 +129,23 @@ NSString *kUserDefaultsActive = @"sck_active";
     if (self.manager) {
         [self.manager disconnect];
     }
-
-    if (endpoint == nil) {
-        return;
-    }
     
     if ([self getAPIKey] == nil) {
         return;
     }
-
-    [self.longTerm cacheDumpAndClear:YES];
     
     if ([self appShouldBeActive] == false) {
         if (self.didIdentify == NO) {
             self.didIdentify = YES;
             [self.longTerm identify];
+            [self.longTerm cacheDumpAndClear:YES];
         }
+        return;
+    }
+    
+    [self.longTerm cacheDumpAndClear:YES];
+    
+    if (endpoint == nil) {
         return;
     }
     
@@ -148,7 +155,7 @@ NSString *kUserDefaultsActive = @"sck_active";
     
     [socket on:@"ack" callback:^(NSArray* data, SocketAckEmitter* ack) {
         NSDictionary *registrationParams = [self client_identity_info];
-        NSLog(@"[PARAMS] %@",registrationParams);
+        NSLog(@"[VISIBILITY] [PARAMS] %@",registrationParams);
         [socket emit:@"client-identify" with:@[registrationParams]];
     }];
     
@@ -191,7 +198,7 @@ NSString *kUserDefaultsActive = @"sck_active";
 - (void)applicationDidEnterBackground {
     NSArray <SCKLogMessage *>* cache = [self.longTerm cacheDumpAndClear:YES];
     if (!cache || [cache count] == 0) {
-        NSLog(@"[Visibility] Cache is empty, can not flush on application close");
+        NSLog(@"[VISIBILITY] Cache is empty, can not flush on application close");
         return;
     }
 }

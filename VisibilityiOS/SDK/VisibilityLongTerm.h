@@ -10,9 +10,11 @@
 
 #import "SCKLogMessage.h"
 
+#import "VisibilitySocketLogger.h"
+
 @interface VisibilityLongTerm : NSObject
 
-- (id)initAndWithCache:(NSString *)cacheIdentifier;
+- (id)initAndWithCache:(NSString *)cacheIdentifier logger:(SCKLogger *)logger;
 - (void)identify;
 
 - (void)receiveNewMessage:(SCKLogMessage *)message;
